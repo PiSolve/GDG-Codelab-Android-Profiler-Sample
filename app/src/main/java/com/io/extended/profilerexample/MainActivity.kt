@@ -207,7 +207,7 @@ class MainActivity : AppCompatActivity() {
         findViewById<RelativeLayout>(R.id.stop_watch_layout).visibility = View.GONE
         findViewById<RelativeLayout>(R.id.timer_layout).visibility = View.VISIBLE
         supportActionBar?.title = "Profiler"
-        sample_text.text = stringFromJNITimer()
+        sample_text.text = "TIMER"
     }
 
     private fun changeToStopWatch() {
@@ -217,7 +217,7 @@ class MainActivity : AppCompatActivity() {
         findViewById<RelativeLayout>(R.id.timer_layout).visibility = View.GONE
         findViewById<RelativeLayout>(R.id.stop_watch_layout).visibility = View.VISIBLE
         supportActionBar?.title = "Profiler"
-        sample_text.text = stringFromJNIStopWatch()
+        sample_text.text = "STOP_WATCH"
     }
 
 
@@ -248,22 +248,6 @@ class MainActivity : AppCompatActivity() {
     private fun startDownloadingImage(){
         handler.postDelayed( { DownloadImageAsyncTask(this).execute(findViewById<LinearLayout>(R.id.activity_main)) },4000)
 
-    }
-
-    /**
-     * A native method that is implemented by the 'native-lib' native library,
-     * which is packaged with this application.
-     */
-    external fun stringFromJNIStopWatch(): String
-
-    external fun stringFromJNITimer(): String
-
-    companion object {
-
-        // Used to load the 'native-lib' library on application startup.
-        init {
-            System.loadLibrary("native-lib")
-        }
     }
 
 
