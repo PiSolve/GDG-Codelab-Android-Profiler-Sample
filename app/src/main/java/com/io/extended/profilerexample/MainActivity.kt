@@ -1,6 +1,5 @@
 package com.io.extended.profilerexample
 
-import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
@@ -29,7 +28,11 @@ import com.google.android.gms.location.LocationServices
 import kotlinx.android.synthetic.main.activity_main.sample_text
 
 
+private const val TAG_PROFILER = "Profiler"
+private const val TAG_WAKE_LOCK = "codeLab:evilLock"
+
 class MainActivity : AppCompatActivity() {
+
     var millisecondTime: Long = 0
     var startTime: Long = 0
     var timeBuff: Long = 0
@@ -39,7 +42,6 @@ class MainActivity : AppCompatActivity() {
     var milliseconds: Int = 0
     var handler: Handler = Handler()
     private var countDownTimer: CountDownTimer? = null
-    private lateinit var wl: PowerManager.WakeLock
     private var runnable = object : Runnable {
         override fun run() {
             millisecondTime = SystemClock.uptimeMillis() - startTime
@@ -63,16 +65,16 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-
+    private lateinit var wl: PowerManager.WakeLock
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    @SuppressLint("InvalidWakeLockTag")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val pm = getSystemService(
                 Context.POWER_SERVICE) as PowerManager
         wl = pm.newWakeLock(
-                PowerManager.SCREEN_DIM_WAKE_LOCK or PowerManager.ON_AFTER_RELEASE, "foiqwf")
+                PowerManager.SCREEN_DIM_WAKE_LOCK or PowerManager.ON_AFTER_RELEASE, TAG_WAKE_LOCK)
 
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
@@ -152,8 +154,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private val PROFILER: String = "Profiler"
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_options, menu)
         return super.onCreateOptionsMenu(menu)
@@ -168,12 +168,12 @@ class MainActivity : AppCompatActivity() {
 
         } else {
             fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-                Log.d(PROFILER, "Got new location $location")
+                Log.d(TAG_PROFILER, "Got new location $location")
             }
         }
     }
 
-    fun setClickListenersFoTimer() {
+    private fun setClickListenersFoTimer() {
         findViewById<Button>(R.id.ten_timer).setOnClickListener { setTimer(10 * 1000L) }
         findViewById<Button>(R.id.twenty_timer).setOnClickListener { setTimer(20 * 1000L) }
         findViewById<Button>(R.id.thirty_timer).setOnClickListener { setTimer(30 * 1000L) }
@@ -201,7 +201,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-
     private fun changeToTimer() {
         resetStopWatch()
         findViewById<RelativeLayout>(R.id.stop_watch_layout).visibility = View.GONE
@@ -220,8 +219,7 @@ class MainActivity : AppCompatActivity() {
         sample_text.text = "STOP_WATCH"
     }
 
-
-    fun setAlarm(context: Context, timeDelay: Long) {
+    private fun setAlarm(context: Context, timeDelay: Long) {
         Log.d(">>>Profiler", "alarmSet")
         val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val i = Intent(context, AlarmBroadCastReceiver::class.java)
@@ -229,7 +227,7 @@ class MainActivity : AppCompatActivity() {
         am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + timeDelay, 0, pi) // Millisec * Second * Minute
     }
 
-    fun cancelAlarm(context: Context) {
+    private fun cancelAlarm(context: Context) {
         Log.d(">>>Profiler", "alarmCancelled")
         val intent = Intent(context, AlarmBroadCastReceiver::class.java)
         val sender = PendingIntent.getBroadcast(context, 0, intent, 0)
@@ -237,18 +235,16 @@ class MainActivity : AppCompatActivity() {
         alarmManager.cancel(sender)
     }
 
-    fun makeEverythingGone() {
+    private fun makeEverythingGone() {
         findViewById<RelativeLayout>(R.id.timer_layout).visibility = View.GONE
         findViewById<RelativeLayout>(R.id.stop_watch_layout).visibility = View.GONE
         sample_text.text = "Profiling"
     }
 
 
-
-    private fun startDownloadingImage(){
-        handler.postDelayed( { DownloadImageAsyncTask(this).execute(findViewById<LinearLayout>(R.id.activity_main)) },4000)
+    private fun startDownloadingImage() {
+        handler.postDelayed({ DownloadImageAsyncTask(this).execute(findViewById<LinearLayout>(R.id.activity_main)) }, 4000)
 
     }
-
 
 }

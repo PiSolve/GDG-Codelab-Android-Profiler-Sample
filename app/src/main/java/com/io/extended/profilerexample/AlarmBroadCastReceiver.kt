@@ -5,7 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 
+
 class AlarmBroadCastReceiver : BroadcastReceiver() {
+
     /**
      * This method is called when the BroadcastReceiver is receiving an Intent
      * broadcast.  During this time you can use the other methods on
@@ -46,14 +48,15 @@ class AlarmBroadCastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         Log.d(">>>Profiler", "received alarm event ")
         // calculate  fib for this nth sequence
-        val fib = calculateFibanocci(2000)
+        val fib = calculateFibonacci(2000)
         Log.d(">>>Profiler", "calculate fib is $fib ")
     }
 
-    private fun calculateFibanocci(num: Int): Int {
-        if (num <= 1)
-            return 1
-        return calculateFibanocci(num - 1) + calculateFibanocci(num - 2)
+    private fun calculateFibonacci(num: Int): Int {
+        if (num <= 1) return 1
+
+        return calculateFibonacci(num - 1) + calculateFibonacci(num - 2)
 
     }
+
 }

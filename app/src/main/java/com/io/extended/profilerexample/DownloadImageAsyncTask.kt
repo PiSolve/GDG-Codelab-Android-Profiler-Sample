@@ -14,6 +14,9 @@ import java.net.URL
 const val IMAGE_URL = "https://www.beautycolorcode.com/38e6d3.png"
 
 class DownloadImageAsyncTask(private val context: Context) : AsyncTask<View, Void, Bitmap>() {
+
+    var imgView: View? = null
+
     /**
      * Override this method to perform a computation on a background thread. The
      * specified parameters are the parameters passed to [.execute]
@@ -31,17 +34,15 @@ class DownloadImageAsyncTask(private val context: Context) : AsyncTask<View, Voi
      *
      * @see .publishProgress
      */
-    var imgView: View? = null
-
     override fun doInBackground(vararg params: View?): Bitmap? {
-        Log.d(">>>Profiler","startDownloading")
+        Log.d(">>>Profiler", "startDownloading")
         imgView = params[0]
         return download_Image()
 
     }
 
     override fun onPostExecute(result: Bitmap?) {
-        Log.d(">>>Profiler","downloadingDone")
+        Log.d(">>>Profiler", "downloadingDone")
         result?.run {
             var ob = BitmapDrawable(context.resources, result)
             imgView?.background = ob
@@ -55,13 +56,13 @@ class DownloadImageAsyncTask(private val context: Context) : AsyncTask<View, Voi
         try {
             val ulrn = URL(IMAGE_URL)
             val con = ulrn.openConnection() as HttpURLConnection
-            val `is` = con.getInputStream()
-            bmp = BitmapFactory.decodeStream(`is`)
+            val stream = con.inputStream
+            bmp = BitmapFactory.decodeStream(stream)
             if (null != bmp)
                 return bmp
 
         } catch (e: Exception) {
-            Log.d(">>>Profiler","exception $e")
+            Log.d(">>>Profiler", "exception $e")
             e.printStackTrace()
         }
 

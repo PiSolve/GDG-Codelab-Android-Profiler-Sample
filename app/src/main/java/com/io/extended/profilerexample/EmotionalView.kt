@@ -9,11 +9,15 @@ import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
 
+
 /**
  * copyrights
  * https://www.raywenderlich.com/142-android-custom-view-tutorial
  */
-class EmotionalView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : View(context, attrs, defStyleAttr) {
+class EmotionalView @JvmOverloads constructor(
+        context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
+
     // Paint object for coloring and styling
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
     // Some colors for the face background, eyes and mouth.
@@ -44,6 +48,7 @@ class EmotionalView @JvmOverloads constructor(context: Context, attrs: Attribute
         const val HAPPY = 0L
         const val SAD = 1L
     }
+
     var happinessState = HAPPY
         set(state) {
             field = state
