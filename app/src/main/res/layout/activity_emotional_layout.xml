@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?><!--Full path for the cusom view -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="20dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/header_tv"
+        android:text="Emotional World"
+        android:layout_width="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content" />
+
+    <com.io.extended.profilerexample.EmotionalView
+        android:id="@+id/happyButton"
+        android:layout_width="@dimen/face_button_dimen"
+        android:layout_height="@dimen/face_button_dimen"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        app:borderColor="@color/white"
+        android:layout_marginTop="20dp"
+        app:eyesColor="@color/white"
+        app:faceColor="@color/red"
+        app:mouthColor="@color/white"
+        app:state="happy" />
+
+    <com.io.extended.profilerexample.EmotionalView
+        android:id="@+id/sadButton"
+        android:layout_width="@dimen/face_button_dimen"
+        android:layout_marginTop="20dp"
+        android:layout_height="@dimen/face_button_dimen"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        app:borderColor="@color/black"
+        app:eyesColor="@color/black"
+        app:faceColor="@color/light_grey"
+        app:mouthColor="@color/black"
+        app:state="sad" />
+
+    <!--Full path for the cusom view -->
+    <com.io.extended.profilerexample.EmotionalView
+        android:id="@+id/emotionalFaceView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_below="@+id/header_tv" />
+</RelativeLayout>

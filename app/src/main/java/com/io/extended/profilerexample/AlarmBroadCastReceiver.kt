@@ -45,5 +45,15 @@ class AlarmBroadCastReceiver : BroadcastReceiver() {
      */
     override fun onReceive(context: Context?, intent: Intent?) {
         Log.d(">>>Profiler", "received alarm event ")
+        // calculate  fib for this nth sequence
+        val fib = calculateFibanocci(2000)
+        Log.d(">>>Profiler", "calculate fib is $fib ")
+    }
+
+    private fun calculateFibanocci(num: Int): Int {
+        if (num <= 1)
+            return 1
+        return calculateFibanocci(num - 1) + calculateFibanocci(num - 2)
+
     }
 }
