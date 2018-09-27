@@ -61,7 +61,7 @@ class DownloadImageAsyncTask(private val context: Context) : AsyncTask<View, Voi
 
             if (null != bmp) return bmp
         } catch (e: Exception) {
-            Log.d(">>>Profiler", "exception $e")
+            Log.e(">>>Profiler", "Error downloading background image!", e)
             e.printStackTrace()
         }
 
