@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     >
 
-    <TextView
+    <com.io.extended.profilerexample.view.TimeView
         android:id="@+id/stop_watch_time"
         android:layout_width="200dp"
         android:layout_height="200dp"

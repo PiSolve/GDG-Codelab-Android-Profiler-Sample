@@ -11,7 +11,6 @@ import android.os.CountDownTimer
 import android.os.Debug
 import android.os.Handler
 import android.os.PowerManager
-import android.os.SystemClock
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
@@ -25,6 +24,7 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.io.extended.profilerexample.view.TimeView
 import kotlinx.android.synthetic.main.activity_main.sample_text
 
 
@@ -33,37 +33,8 @@ private const val TAG_WAKE_LOCK = "codeLab:evilLock"
 
 class MainActivity : AppCompatActivity() {
 
-    var millisecondTime: Long = 0
-    var startTime: Long = 0
-    var timeBuff: Long = 0
-    var updateTime = 0L
-    var seconds: Int = 0
-    var minutes: Int = 0
-    var milliseconds: Int = 0
     var handler: Handler = Handler()
     private var countDownTimer: CountDownTimer? = null
-    private var runnable = object : Runnable {
-        override fun run() {
-            millisecondTime = SystemClock.uptimeMillis() - startTime
-
-            updateTime = timeBuff + millisecondTime
-
-            seconds = (updateTime / 1000).toInt()
-
-            minutes = seconds / 60
-
-            seconds %= 60
-
-            milliseconds = (updateTime % 1000).toInt()
-            findViewById<TextView>(R.id.stop_watch_time).text = ("" + minutes + ":"
-                    + String.format("%02d", seconds))
-            /* + ":"
-             + String.format("%03d", milliseconds))*/
-
-            handler.postDelayed(this, 0)
-        }
-
-    }
 
     private lateinit var wl: PowerManager.WakeLock
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -80,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         // Example of a call to a native method
-        setClickListeners(wl, runnable)
+        setClickListeners(wl)
         setClickListenersFoTimer()
 
         checkPermissions()
@@ -103,22 +74,20 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun setClickListeners(wl: PowerManager.WakeLock, runnable: Runnable) {
+    private fun setClickListeners(wl: PowerManager.WakeLock) {
         findViewById<Button>(R.id.start_stop_watch).setOnClickListener {
-            startStopWatch(wl, runnable)
+            startStopWatch(wl)
         }
         findViewById<Button>(R.id.reset_stop_watch).setOnClickListener {
             resetStopWatch()
         }
         findViewById<Button>(R.id.stop_stop_watch).setOnClickListener {
-            stopStopWatch(runnable, wl)
+            stopStopWatch(wl)
         }
     }
 
-    private fun stopStopWatch(runnable: Runnable, wl: PowerManager.WakeLock) {
-        timeBuff += millisecondTime
-
-        handler.removeCallbacks(runnable)
+    private fun stopStopWatch(wl: PowerManager.WakeLock) {
+        findViewById<TimeView>(R.id.stop_watch_time).stop()
 
         findViewById<Button>(R.id.reset_stop_watch).isEnabled = true
         wl.release()
@@ -128,29 +97,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun resetStopWatch() {
-        millisecondTime = 0L
-        startTime = 0L
-        timeBuff = 0L
-        updateTime = 0L
-        seconds = 0
-        minutes = 0
-        milliseconds = 0
-        findViewById<TextView>(R.id.stop_watch_time).text = "00:00"
-
-        // for cpu profiling to show case systrace
-
+        findViewById<TimeView>(R.id.stop_watch_time).reset()
     }
 
-    private fun startStopWatch(wl: PowerManager.WakeLock, runnable: Runnable) {
+    private fun startStopWatch(wl: PowerManager.WakeLock) {
         // to show ..in energy profiler , about wake locks , acquire and release
         ////////////////////////////////////////////////////////////////////////////////////////////////
         Debug.startMethodTracing()
         wl.acquire()
-        startTime = SystemClock.uptimeMillis()
-        handler.postDelayed(runnable, 0)
+
+        findViewById<TimeView>(R.id.stop_watch_time).start()
 
         findViewById<Button>(R.id.reset_stop_watch).isEnabled = false
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -242,8 +200,10 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun startDownloadingImage() {
-        handler.postDelayed({ DownloadImageAsyncTask(this).execute(findViewById<LinearLayout>(R.id.activity_main)) }, 4000)
-
+        handler.postDelayed({
+            DownloadImageAsyncTask(this)
+                    .execute(findViewById<LinearLayout>(R.id.activity_main))
+        }, 4000)
     }
 
 }
