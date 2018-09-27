@@ -111,7 +111,6 @@ class MainActivity : AppCompatActivity() {
             resetStopWatch()
         }
         findViewById<Button>(R.id.stop_stop_watch).setOnClickListener {
-
             stopStopWatch(runnable, wl)
         }
     }
@@ -188,7 +187,7 @@ class MainActivity : AppCompatActivity() {
         countDownTimer = object : CountDownTimer(i, 1000) {
 
             override fun onTick(millisUntilFinished: Long) {
-                findViewById<TextView>(R.id.timer_text).text = "" + millisUntilFinished / 1000
+                findViewById<TextView>(R.id.timer_text).text = "${millisUntilFinished / 1000}"
             }
 
             override fun onFinish() {
