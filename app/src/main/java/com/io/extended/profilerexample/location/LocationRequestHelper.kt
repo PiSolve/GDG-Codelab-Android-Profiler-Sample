@@ -61,8 +61,7 @@ fun triggerLocationUpdates(context: Context) {
     }
 
     try {
-        val task = locationProvider(context).requestLocationUpdates(locationRequest, getPendingIntent(context))
-        Log.i(">>>Location", "Task result: ${task.result}")
+        locationProvider(context).requestLocationUpdates(locationRequest, getPendingIntent(context))
     } catch (e: SecurityException) {
         Log.e(">>>>Location", "Missing permissions!", e)
     }

@@ -23,7 +23,7 @@ import android.util.Log
 import com.google.android.gms.location.LocationResult
 
 
-private const val TAG = "LUBroadcastReceiver"
+private const val TAG = ">>>>LocationBroadcast"
 
 const val ACTION_PROCESS_UPDATES = "com.io.extended.profilerexample.location.ACTION_PROCESS_UPDATES"
 

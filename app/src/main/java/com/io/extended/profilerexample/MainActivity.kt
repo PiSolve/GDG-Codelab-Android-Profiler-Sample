@@ -17,12 +17,16 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
-import android.widget.RelativeLayout
+import android.widget.Switch
 import android.widget.TextView
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.io.extended.profilerexample.location.LocationRequestHelper
+import com.io.extended.profilerexample.location.stopLocationUpdates
+import com.io.extended.profilerexample.location.triggerLocationUpdates
 import com.io.extended.profilerexample.view.TimeView
 import kotlinx.android.synthetic.main.activity_main.sample_text
 
@@ -64,9 +68,17 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         makeEverythingGone()
+        findViewById<Switch>(R.id.location_switch).setOnCheckedChangeListener { _, isChecked ->
+            toggleLocationUpdates(isChecked)
+        }
         findViewById<Button>(R.id.download_image).setOnClickListener {
             downloadNewBackground()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        findViewById<Switch>(R.id.location_switch).isChecked = LocationRequestHelper.getRequesting(this)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -144,7 +156,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setClickListenersFoTimer() {
-        findViewById<Button>(R.id.ten_timer).setOnClickListener { setTimer(3 * 1000L) }
+        findViewById<Button>(R.id.ten_timer).setOnClickListener { setTimer(10 * 1000L) }
         findViewById<Button>(R.id.twenty_timer).setOnClickListener { setTimer(20 * 1000L) }
         findViewById<Button>(R.id.thirty_timer).setOnClickListener { setTimer(30 * 1000L) }
     }
@@ -171,21 +183,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun changeToTimer() {
-        findViewById<Button>(R.id.download_image).visibility = View.GONE
         resetStopWatch()
-        findViewById<RelativeLayout>(R.id.stop_watch_layout).visibility = View.GONE
-        findViewById<RelativeLayout>(R.id.timer_layout).visibility = View.VISIBLE
+        findViewById<ViewGroup>(R.id.home_layout).visibility = View.GONE
+        findViewById<ViewGroup>(R.id.stop_watch_layout).visibility = View.GONE
+        findViewById<ViewGroup>(R.id.timer_layout).visibility = View.VISIBLE
         supportActionBar?.title = "Profiler"
         sample_text.text = "TIMER"
     }
 
     private fun changeToStopWatch() {
-        findViewById<Button>(R.id.download_image).visibility = View.GONE
         countDownTimer?.onFinish()
         countDownTimer?.cancel()
         findViewById<TextView>(R.id.timer_text).text = "0"
-        findViewById<RelativeLayout>(R.id.timer_layout).visibility = View.GONE
-        findViewById<RelativeLayout>(R.id.stop_watch_layout).visibility = View.VISIBLE
+        findViewById<ViewGroup>(R.id.home_layout).visibility = View.GONE
+        findViewById<ViewGroup>(R.id.timer_layout).visibility = View.GONE
+        findViewById<ViewGroup>(R.id.stop_watch_layout).visibility = View.VISIBLE
         supportActionBar?.title = "Profiler"
         sample_text.text = "STOP_WATCH"
     }
@@ -197,7 +209,7 @@ class MainActivity : AppCompatActivity() {
                 AlarmManager.RTC_WAKEUP,
                 System.currentTimeMillis() + timeDelay,
                 0,
-                pendingIntentForAlarm(context)) // Millisec * Second * Minute
+                pendingIntentForAlarm(context))
     }
 
     private fun cancelAlarm(context: Context) {
@@ -212,10 +224,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun makeEverythingGone() {
-        findViewById<RelativeLayout>(R.id.timer_layout).visibility = View.GONE
-        findViewById<RelativeLayout>(R.id.stop_watch_layout).visibility = View.GONE
+        findViewById<ViewGroup>(R.id.timer_layout).visibility = View.GONE
+        findViewById<ViewGroup>(R.id.stop_watch_layout).visibility = View.GONE
+        findViewById<ViewGroup>(R.id.home_layout).visibility = View.VISIBLE
         sample_text.text = "Profiling"
-        findViewById<Button>(R.id.download_image).visibility = View.VISIBLE
     }
 
     private fun downloadNewBackground() {
@@ -223,6 +235,16 @@ class MainActivity : AppCompatActivity() {
         imageCount++
         DownloadImageAsyncTask(this, url)
                 .execute(findViewById<LinearLayout>(R.id.activity_main))
+    }
+
+    private fun toggleLocationUpdates(enabled: Boolean) {
+        val ctx = this.applicationContext
+        LocationRequestHelper.setRequesting(ctx, enabled)
+        if (enabled) {
+            triggerLocationUpdates(ctx)
+        } else {
+            stopLocationUpdates(ctx)
+        }
     }
 
 }

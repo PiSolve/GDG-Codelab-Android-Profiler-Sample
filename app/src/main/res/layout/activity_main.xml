@@ -3,7 +3,7 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ECEFF1"
+    android:background="#888888"
     android:orientation="vertical"
     android:paddingLeft="25dp"
     android:paddingTop="25dp"
@@ -16,16 +16,15 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal"
-        android:textColor="#009688"
+        android:textColor="@color/white"
         android:textSize="50dp"
         android:textStyle="bold" />
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="30dp"
-        android:layout_gravity="center_vertical">
-
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="30dp">
 
         <include
             android:id="@+id/stop_watch_layout"
@@ -35,19 +34,16 @@
 
         <include
             android:id="@+id/timer_layout"
+            layout="@layout/layout_timer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            layout="@layout/layout_timer" />
-        <Button
-            android:layout_width="wrap_content"
-            android:text="Download"
-            android:id="@+id/download_image"
-            android:textColor="#009688"
-            android:layout_gravity="bottom|center_horizontal"
             android:layout_height="wrap_content" />
+
+        <include
+            android:id="@+id/home_layout"
+            layout="@layout/layout_home"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
     </FrameLayout>
-
-
-
 
 </LinearLayout>

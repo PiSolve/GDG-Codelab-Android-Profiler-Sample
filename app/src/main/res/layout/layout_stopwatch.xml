@@ -13,7 +13,7 @@
         android:layout_marginTop="10dp"
         android:background="@drawable/bkg_circle_stopwatch"
         android:gravity="center"
-        android:textColor="#ff0000"
+        android:textColor="@color/white"
         android:textSize="25dp"
         />
 
@@ -33,6 +33,7 @@
             android:layout_weight="1"
             android:background="@drawable/bkg_button"
             android:text="Start"
+            android:textColor="@color/white"
             />
 
         <Button
@@ -42,6 +43,7 @@
             android:layout_weight="1"
             android:background="@drawable/bkg_button"
             android:text="Reset"
+            android:textColor="@color/white"
             />
 
         <Button
@@ -51,6 +53,7 @@
             android:layout_weight="1"
             android:background="@drawable/bkg_button"
             android:text="Stop"
+            android:textColor="@color/white"
             />
 
     </LinearLayout>

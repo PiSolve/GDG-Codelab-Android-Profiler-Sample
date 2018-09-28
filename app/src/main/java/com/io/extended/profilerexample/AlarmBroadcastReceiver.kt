@@ -7,9 +7,9 @@ import android.util.Log
 import com.io.extended.profilerexample.location.triggerLocationUpdates
 
 
-var actionOnReceive = 1
+var actionOnReceive = -1
 
-private const val FIBONACCI_INDEX = 2000
+private const val FIBONACCI_INDEX = 42
 
 class AlarmBroadcastReceiver : BroadcastReceiver() {
 
