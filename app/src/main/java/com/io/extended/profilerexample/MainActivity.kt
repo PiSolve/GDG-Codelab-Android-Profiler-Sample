@@ -9,7 +9,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Debug
-import android.os.Handler
 import android.os.PowerManager
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
@@ -33,22 +32,19 @@ private const val TAG_WAKE_LOCK = "codeLab:evilLock"
 
 class MainActivity : AppCompatActivity() {
 
-    var handler: Handler = Handler()
     private var countDownTimer: CountDownTimer? = null
+    private var imageCount = 0
+    private val downloadUrls = listOf(
+            "http://mobw.org/wp-content/uploads/2017/04/Beautiful-Night-Sky-Wallpapers.jpg",
+            "http://knowbystillmotion.com/wp-content/uploads/2018/07/World-Map-Black-And-White-Tumblr-Best-Of-Black-Marble-As-World-Map-Black-And-White-Tumblr-Best-Of-Black-Marble-Just-Let-It-Be-Quote-Grunge-Tumblr-Aesthetic-Iphone-1-6.jpg",
+            "http://getwallpapers.com/wallpaper/full/8/5/d/454230.jpg",
+            "http://mobw.org/wp-content/uploads/2017/05/Black-Night-Sky-Wallpaper-for-Mobile.jpg",
+            "http://spliffmobile.com/download/dark-night-6698.jpg",
+            "http://getwallpapers.com/wallpaper/full/f/e/e/328184.jpg",
+            "http://genchi.info/image/wallpaper-night-2.jpg")
 
     private lateinit var wl: PowerManager.WakeLock
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    var imageCount = 0
-
-
-    val downloadUrls: List<String> = listOf(
-            "http://2.bp.blogspot.com/_xm56s1x5xzU/SPLU1j6zNUI/AAAAAAAAAt4/J6JostuMPp4/s1600/indian-nature.jpg",
-            "http://bp1.blogger.com/_xm56s1x5xzU/SHyJj78QklI/AAAAAAAAAeU/38j37_54oEI/s1600-h/Sea-shore-Wallpaper.jpg",
-            "http://3.bp.blogspot.com/-v9tU8ZKICi8/UKmZLRXY-nI/AAAAAAAAHQQ/10KEU3BzJE8/s1600/autumn-trees.jpg",
-            "http://www.wallpaperstop.com/wallpapers/nature-wallpapers/scenery-wallpapers/nature-scene-1920x1080-1007115.jpg",
-            "http://4.bp.blogspot.com/-pGJOhalcnpE/TnXnfybMpKI/AAAAAAAAAZg/d0J5XmS_FLM/s1600/Palm+Trees+on+Fiji.jpg",
-            "http://2.bp.blogspot.com/_xm56s1x5xzU/SPLU1j6zNUI/AAAAAAAAAt4/J6JostuMPp4/s1600/indian-nature.jpg")
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,7 +53,6 @@ class MainActivity : AppCompatActivity() {
                 Context.POWER_SERVICE) as PowerManager
         wl = pm.newWakeLock(
                 PowerManager.SCREEN_DIM_WAKE_LOCK or PowerManager.ON_AFTER_RELEASE, TAG_WAKE_LOCK)
-
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
@@ -69,9 +64,8 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         makeEverythingGone()
-//        startDownloadingImage()
         findViewById<Button>(R.id.download_image).setOnClickListener {
-            startDownloadingImage()
+            downloadNewBackground()
         }
     }
 
@@ -224,9 +218,8 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.download_image).visibility = View.VISIBLE
     }
 
-    private fun startDownloadingImage() {
+    private fun downloadNewBackground() {
         val url = downloadUrls[imageCount % downloadUrls.size]
-        Log.d(">>>>Hai", "Ye raha: $url")
         imageCount++
         DownloadImageAsyncTask(this, url)
                 .execute(findViewById<LinearLayout>(R.id.activity_main))
