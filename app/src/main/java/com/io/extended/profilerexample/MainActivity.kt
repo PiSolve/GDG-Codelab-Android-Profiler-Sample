@@ -83,7 +83,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if (item?.itemId == android.R.id.home) {
-            onBackPressed()
+            makeEverythingGone()
         } else {
             if (item?.itemId == R.id.stopWatch) {
                 changeToStopWatch()
