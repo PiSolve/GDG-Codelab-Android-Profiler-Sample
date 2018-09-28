@@ -26,6 +26,7 @@
         android:layout_marginTop="30dp"
         android:layout_gravity="center_vertical">
 
+
         <include
             android:id="@+id/stop_watch_layout"
             layout="@layout/layout_stopwatch"
@@ -37,7 +38,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             layout="@layout/layout_timer" />
+        <Button
+            android:layout_width="wrap_content"
+            android:text="Download"
+            android:id="@+id/download_image"
+            android:textColor="#009688"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_height="wrap_content" />
     </FrameLayout>
+
+
 
 
 </LinearLayout>

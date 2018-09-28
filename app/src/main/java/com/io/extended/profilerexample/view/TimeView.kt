@@ -64,6 +64,9 @@ class TimeView @JvmOverloads constructor(
     }
 
     private fun formattedTime(millis: Long): String {
+       /* for(i in 1 .. 1000){
+            val newString = i.toString()
+        }*/
         val date = Date(millis)
         val formatter = SimpleDateFormat("mm:ss.SSS", Locale.US)
         formatter.timeZone = TimeZone.getTimeZone("UTC")

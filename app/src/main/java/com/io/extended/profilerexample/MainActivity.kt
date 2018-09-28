@@ -38,6 +38,17 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var wl: PowerManager.WakeLock
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    var imageCount = 0
+
+
+    val downloadUrls: List<String> = listOf(
+            "http://2.bp.blogspot.com/_xm56s1x5xzU/SPLU1j6zNUI/AAAAAAAAAt4/J6JostuMPp4/s1600/indian-nature.jpg",
+            "http://bp1.blogger.com/_xm56s1x5xzU/SHyJj78QklI/AAAAAAAAAeU/38j37_54oEI/s1600-h/Sea-shore-Wallpaper.jpg",
+            "http://3.bp.blogspot.com/-v9tU8ZKICi8/UKmZLRXY-nI/AAAAAAAAHQQ/10KEU3BzJE8/s1600/autumn-trees.jpg",
+            "http://www.wallpaperstop.com/wallpapers/nature-wallpapers/scenery-wallpapers/nature-scene-1920x1080-1007115.jpg",
+            "http://4.bp.blogspot.com/-pGJOhalcnpE/TnXnfybMpKI/AAAAAAAAAZg/d0J5XmS_FLM/s1600/Palm+Trees+on+Fiji.jpg",
+            "http://2.bp.blogspot.com/_xm56s1x5xzU/SPLU1j6zNUI/AAAAAAAAAt4/J6JostuMPp4/s1600/indian-nature.jpg")
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +69,10 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         makeEverythingGone()
-        startDownloadingImage()
+//        startDownloadingImage()
+        findViewById<Button>(R.id.download_image).setOnClickListener {
+            startDownloadingImage()
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -159,6 +173,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun changeToTimer() {
+        findViewById<Button>(R.id.download_image).visibility = View.GONE
         resetStopWatch()
         findViewById<RelativeLayout>(R.id.stop_watch_layout).visibility = View.GONE
         findViewById<RelativeLayout>(R.id.timer_layout).visibility = View.VISIBLE
@@ -167,6 +182,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun changeToStopWatch() {
+        findViewById<Button>(R.id.download_image).visibility = View.GONE
         countDownTimer?.onFinish()
         countDownTimer?.cancel()
         findViewById<TextView>(R.id.timer_text).text = "0"
@@ -196,14 +212,16 @@ class MainActivity : AppCompatActivity() {
         findViewById<RelativeLayout>(R.id.timer_layout).visibility = View.GONE
         findViewById<RelativeLayout>(R.id.stop_watch_layout).visibility = View.GONE
         sample_text.text = "Profiling"
+        findViewById<Button>(R.id.download_image).visibility = View.VISIBLE
     }
 
 
     private fun startDownloadingImage() {
-        handler.postDelayed({
-            DownloadImageAsyncTask(this)
-                    .execute(findViewById<LinearLayout>(R.id.activity_main))
-        }, 4000)
+        val url = downloadUrls[imageCount % downloadUrls.size]
+        Log.d(">>>>Hai", "Ye raha: $url")
+        imageCount++
+        DownloadImageAsyncTask(this, url)
+                .execute(findViewById<LinearLayout>(R.id.activity_main))
     }
 
 }

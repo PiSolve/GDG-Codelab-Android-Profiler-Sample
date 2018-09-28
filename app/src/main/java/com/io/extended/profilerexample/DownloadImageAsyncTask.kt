@@ -11,11 +11,11 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 
-const val IMAGE_URL = "https://www.beautycolorcode.com/38e6d3.png"
 
-class DownloadImageAsyncTask(private val context: Context) : AsyncTask<View, Void, Bitmap>() {
+class DownloadImageAsyncTask(private val context: Context, private val url:String) : AsyncTask<View, Void, Bitmap>() {
 
     private var imgView: View? = null
+
 
     /**
      * Override this method to perform a computation on a background thread. The
@@ -54,7 +54,7 @@ class DownloadImageAsyncTask(private val context: Context) : AsyncTask<View, Voi
 
         var bmp: Bitmap? = null
         try {
-            val iUrl = URL(IMAGE_URL)
+            val iUrl = URL(url)
             val con = iUrl.openConnection() as HttpURLConnection
             val stream = con.inputStream
             bmp = BitmapFactory.decodeStream(stream)
