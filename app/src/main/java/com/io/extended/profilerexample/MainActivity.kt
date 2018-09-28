@@ -120,7 +120,12 @@ class MainActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= 23 &&
                 ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION),
+            ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(
+                            android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                            android.Manifest.permission.ACCESS_FINE_LOCATION
+                    ),
                     0)
 
         } else {
@@ -131,7 +136,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setClickListenersFoTimer() {
-        findViewById<Button>(R.id.ten_timer).setOnClickListener { setTimer(10 * 1000L) }
+        findViewById<Button>(R.id.ten_timer).setOnClickListener { setTimer(3 * 1000L) }
         findViewById<Button>(R.id.twenty_timer).setOnClickListener { setTimer(20 * 1000L) }
         findViewById<Button>(R.id.thirty_timer).setOnClickListener { setTimer(30 * 1000L) }
     }
@@ -155,7 +160,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
         countDownTimer?.start()
-
     }
 
     private fun changeToTimer() {
@@ -179,17 +183,22 @@ class MainActivity : AppCompatActivity() {
     private fun setAlarm(context: Context, timeDelay: Long) {
         Log.d(">>>Profiler", "alarmSet")
         val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val i = Intent(context, AlarmBroadCastReceiver::class.java)
-        val pi = PendingIntent.getBroadcast(context, 0, i, 0)
-        am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + timeDelay, 0, pi) // Millisec * Second * Minute
+        am.setRepeating(
+                AlarmManager.RTC_WAKEUP,
+                System.currentTimeMillis() + timeDelay,
+                0,
+                pendingIntentForAlarm(context)) // Millisec * Second * Minute
     }
 
     private fun cancelAlarm(context: Context) {
         Log.d(">>>Profiler", "alarmCancelled")
-        val intent = Intent(context, AlarmBroadCastReceiver::class.java)
-        val sender = PendingIntent.getBroadcast(context, 0, intent, 0)
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        alarmManager.cancel(sender)
+        alarmManager.cancel(pendingIntentForAlarm(context))
+    }
+
+    private fun pendingIntentForAlarm(context: Context): PendingIntent {
+        val intent = Intent(context, AlarmBroadcastReceiver::class.java)
+        return PendingIntent.getBroadcast(context, 0, intent, 0)
     }
 
     private fun makeEverythingGone() {
@@ -197,7 +206,6 @@ class MainActivity : AppCompatActivity() {
         findViewById<RelativeLayout>(R.id.stop_watch_layout).visibility = View.GONE
         sample_text.text = "Profiling"
     }
-
 
     private fun startDownloadingImage() {
         handler.postDelayed({
