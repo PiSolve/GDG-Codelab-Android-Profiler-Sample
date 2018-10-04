@@ -12,19 +12,8 @@ int fib(int x) {
 }
 
 int fastFib(const int &n) {
-    int first = 0;
-    int second = 1;
-    int counter = 2;
-    while (counter < n) {
-        int temp = second;
-        second = first + second;
-        first = temp;
-        ++counter;
-    }
-    if (n == 0)
-        return 0;
-    else
-        return first + second;
+    //todo implement a more efficient fibonacci sequence here
+    return 0;
 }
 
 // com.io.extended.profilerexample.view
