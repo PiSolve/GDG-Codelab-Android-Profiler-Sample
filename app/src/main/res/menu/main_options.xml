@@ -11,4 +11,14 @@
         android:title="Timer"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/cpu"
+        android:title="CPU"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/memory"
+        android:title="Memory"
+        app:showAsAction="never" />
+
 </menu>

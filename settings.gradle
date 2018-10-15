@@ -1,1 +1,3 @@
 include ':app'
+include ':cpu:bad', ':cpu:good'
+include ':memory:bad', ':memory:good'
