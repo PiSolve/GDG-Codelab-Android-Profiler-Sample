@@ -28,6 +28,8 @@ import com.io.extended.profilerexample.location.LocationRequestHelper
 import com.io.extended.profilerexample.location.stopLocationUpdates
 import com.io.extended.profilerexample.location.triggerLocationUpdates
 import com.io.extended.profilerexample.view.TimeView
+import com.stevejung.profilesample.CpuActivity
+import com.stevejung.profilesample_00_memory.MemoryActivity
 import kotlinx.android.synthetic.main.activity_main.sample_text
 
 
@@ -84,14 +86,23 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if (item?.itemId == android.R.id.home) {
             makeEverythingGone()
-        } else {
-            if (item?.itemId == R.id.stopWatch) {
-                changeToStopWatch()
-            } else if (item?.itemId == R.id.timer) {
-                changeToTimer()
+        } else if (item != null){
+            when (item.itemId) {
+                R.id.stopWatch -> changeToStopWatch()
+                R.id.timer -> changeToTimer()
+                R.id.cpu -> openCpu()
+                R.id.memory -> openMemory()
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun openMemory() {
+        startActivity(Intent(this, MemoryActivity::class.java))
+    }
+
+    private fun openCpu() {
+        startActivity(Intent(this, CpuActivity::class.java))
     }
 
     private fun setClickListeners(wl: PowerManager.WakeLock) {
